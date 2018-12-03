@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cifar10-single-job
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      name: cifar10-single-job
+      labels:
+        app: cifar10-single-job
+    spec:
+      restartPolicy: OnFailure
+      containers:
+       - name: pytorch
+         image: nvcr.io/nvidia/pytorch:18.11-py3
+         env:
+         - name: JOB_ID
+           value: "1"
+         command: ["bash"]
+         args: ["-c","cd /cifar10-training && python cifar10_train.py"]
+         computeResourceRequests: ["nvidia-gpu"]
+         volumeMounts:
+           name: cifar10-training
+         - mountPath: /cifar10-training
+         volumeMounts:
+         - name: cifar10-dataset
+           mountPath: /cifar10-dataset
+      volumes:
+      - name: cifar10-training
+        gitRepo:
+          repository: "https://github.com/shashankprasanna/kubernetes-hyperparameter-experiment.git"
+          revision: master
+          directory: .
+      - name: cifar10-dataset
+        nfs:
+          server: 10.110.114.22
+          path: /home/sprasanna/Projects/training-datasets
+      computeResources:
+       - name: "nvidia-gpu"
+         resources:
+           limits:
+             nvidia.com/gpu: 1

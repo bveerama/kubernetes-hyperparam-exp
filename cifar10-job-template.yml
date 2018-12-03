@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: resnet-single-gpu-job-$ITEM
+  labels:
+    jobgroup: hyper-opt-example
+spec:
+  template:
+    metadata:
+      name: hyper-opt-example
+      labels:
+        jobgroup: hyper-opt-example
+    spec:
+      imagePullSecrets:
+       - name: nvcr.dgxkey
+      restartPolicy: OnFailure
+      containers:
+       - name: resnet
+         image: nvcr.io/nvidia/tensorflow:18.07-py3
+         command: ["/bin/bash"]
+         args: ["-c", "param=([1]=16 [2]=32 [3]=64 [4]=128); python /opt/tensorflow/nvidia-examples/cnn/resnet.py --layers=50 --precision=fp16 -b=${param[$ITEM]} -i=1000"]
+         computeResourceRequests: ["nvidia-gpu"]
+      computeResources:
+       - name: "nvidia-gpu"
+         resources:
+           limits:
+             nvidia.com/gpu: 1
