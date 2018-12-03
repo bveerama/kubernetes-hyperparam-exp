@@ -18,18 +18,19 @@ spec:
          - name: JOB_ID
            value: "1"
          command: ["bash"]
+#         args: ["-c","sleep 5m"]
+#         command: ["bash"]
          args: ["-c","cd /cifar10-training && python cifar10_train.py"]
          computeResourceRequests: ["nvidia-gpu"]
          volumeMounts:
-           name: cifar10-training
-         - mountPath: /cifar10-training
-         volumeMounts:
+         - name: cifar10-training
+           mountPath: /cifar10-training
          - name: cifar10-dataset
-           mountPath: /cifar10-dataset
+           mountPath: /datasets
       volumes:
       - name: cifar10-training
         gitRepo:
-          repository: "https://github.com/shashankprasanna/kubernetes-hyperparameter-experiment.git"
+          repository: https://github.com/shashankprasanna/kubernetes-hyperparam-exp.git
           revision: master
           directory: .
       - name: cifar10-dataset
