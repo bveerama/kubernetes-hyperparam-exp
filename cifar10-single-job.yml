@@ -17,11 +17,9 @@ spec:
          workingDir: /cifar10-training
          env:
          - name: JOB_ID
-           value: "159"
-#         command: ["bash"]
-#         args: ["-c","sleep 15m"]
-         command: ["python"]
-         args: ["cifar10_train.py"]
+           value: "1"
+         command: ["bash"]
+         args: ["-c","python cifar10_train.py"]
          computeResourceRequests: ["nvidia-gpu"]
          volumeMounts:
          - name: cifar10-training

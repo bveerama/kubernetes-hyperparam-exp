@@ -115,7 +115,7 @@ def main():
     summary = train(model, lr_schedule, opt, train_set_aug, test_set, 
           batch_size=batch_size, loggers=(TableLogger(), TSV), timer=t, test_time_in_total=False, drop_last=True)
         
-    with open('/datasets/logs_job_id_'+str(job_id)+'.csv', 'w') as csvfile:
+    with open('/datasets/results_job_id_'+str(job_id)+'.log', 'w') as csvfile:
         cw = csv.writer(csvfile, delimiter=',')
         for key, val in summary.items():
             cw.writerow([key, val])    
