@@ -1,5 +1,5 @@
 # create job.yaml files
-for i in {1..4}
+for i in $(eval echo {1..$1})
 do
-  cat resnet-hyper-opt-template.yml | sed "s/\$ITEM/$i/" > ./hyper-opt-jobs/hyper-opt-job-$i.yaml
+  cat cifar10-job-template.yml | sed "s/\$ITEM/$i/" > ./hyperparam-jobs-specs/cifar10-job-$i.yml
 done
